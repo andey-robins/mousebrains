@@ -1,21 +1,48 @@
 import pygame
 import math
-# import os
-#
-# def main():
-#
-#     for f in
-#
-#     return
+import os
+import time
 
-def makePic():
+def main():
+
+    start = time.time()
+
+    #clear all outImages
+    for f in os.listdir("outImages/"):
+        os.unlink("outImages/" + f)
+
+    #object to store all files
+    allFiles = []
+
+    #find all files that have useable data
+    for f in os.listdir("data/"):
+        if 'fsl' in f:
+            allFiles.append(f)
+
+    #make images of all the files
+    for f in allFiles:
+        makePic(f)
+
+    print('Process finished in: ' + str(time.time() - start) + ' seconds.')
+
+    return
+
+#pass the filename of a set of data and generate a screenshot of that data
+def makePic(fileName):
+
+    print('Making photo for file: ' + fileName)
+
+    #exit for data that doesn't fit the model
+    if "1020" in fileName:
+        return
 
     dataValues = []
     size = 0
 
-    fileName = 'datafile'
+    fileName = fileName[:-4]
 
-    with open(fileName + '.txt', 'r') as f:
+    #open and map all the values from a data file
+    with open("data/" + fileName + ".txt", 'r') as f:
         for line in f:
             r, g, b = line.split()
             size += 1
@@ -36,7 +63,7 @@ def makePic():
             index += 1
 
     #generate the screenshot
-    pygame.image.save(screen, fileName + '.jpg')
+    pygame.image.save(screen, "outImages/" + fileName + ".jpg")
 
     pygame.quit()
 
